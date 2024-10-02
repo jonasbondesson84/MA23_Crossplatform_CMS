@@ -5,9 +5,10 @@ import './App.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { actions } from './features/question'
 import Question from './components/Question'
+import AddQuestion from './components/AddQuestion'
 function App() {
   const dispatch = useDispatch();
-  const questions = useSelector(state => state.question);
+  const questions = useSelector(state => state.questions);
 
   return (
     <>
@@ -18,9 +19,11 @@ function App() {
       {questions.map(question => (
         <div key={question.question.id}>
           <Question question={question.question}/>
+          
           </div>
         // <div></div>
       ))}
+      <AddQuestion />
     </>
   )
 }
