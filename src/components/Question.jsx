@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addQuestion, updateQuestion, deleteQuestion } from "../features/question";
 import { updateAnswer } from "../features/answers";
 import {CiStar} from 'react-icons/ci'
+import { FaStar } from "react-icons/fa";
 
 
 const Question = ({question, numberOfQuestions, index}) => {
@@ -13,6 +14,7 @@ const Question = ({question, numberOfQuestions, index}) => {
     const dispatch = useDispatch();
     const questions = useSelector(state => state.questions);
     const answersList = useSelector(state => state.answers);
+    
     
     const saveAnswer = () => {
         const id = question.id;
@@ -33,25 +35,32 @@ const Question = ({question, numberOfQuestions, index}) => {
                     const answer = options[index];
                     saveAnswerInList(questionId, answer)
                     }}>{options[index]}</button>
-                {/* <input type="radio" name="anwer" id={options[index]} value={options[index]} 
-                onChange={e => 
-                    
-                    saveAnswerInList(questionId, e.target.value)
-                }
-                /> */}
-                
-
             </div>
         )
         )
     }
 
-    const Stars = ({numberOfStars}) => {
+    const Stars = ({numberOfStars, question}) => {
+        const [rank, setRank] = useState(Array(numberOfStars).fill(false));
+
+        const updateRating = (newRating) => {
+            const newRank = rank.map((value, index) => {
+                return index <= newRating ? true : false;
+            })
+            setRank(newRank);
+            saveAnswerInList(question.id, newRating);
+            
+        }
+
         return Array.from({length: numberOfStars}).map((_, index) => (
             <div key={index}>
-                <CiStar className="star" onClick={() => {
-
-                }}/>
+                {rank[index] ? (
+            <FaStar className="star" onClick={() => {updateRating(index);
+                }} />
+        ) : (
+            <CiStar className="star" onClick={() => {updateRating(index);
+                }} />
+        )}
             </div>
         ))
     }
@@ -104,7 +113,7 @@ const Question = ({question, numberOfQuestions, index}) => {
                     <p className="body">{question.body}</p>
                     <div className="answer-content stars">
                         
-                        <Stars numberOfStars={question.numberOfStars}/>
+                        <Stars numberOfStars={question.numberOfStars} question={question}/>
                     </div>
                     
                 </div>

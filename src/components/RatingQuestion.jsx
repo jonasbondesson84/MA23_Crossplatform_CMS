@@ -65,18 +65,23 @@ const RatingQuestion = ({setHideType, setType}) => {
     return ( 
         <div>
         <section className="question">
-            <div><input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" className="title"/></div>
-            <div><input type="text" value={body} onChange={e => setBody(e.target.value)} className="text-body" placeholder="Question"/></div>
+            <div>
+                <input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" className="text-field"/>
+            </div>
+            
+            <div>
+                <textarea name="" id="" cols="30" rows="10" value={body} onChange={e => setBody(e.target.value)} placeholder="Question" className="text-area"/>
+            </div>
             <div className="stars">
                 <Stars />
             </div>
             <div>
-            <button onClick={handleIncrease}>+</button>
-            <button onClick={handleDecrease}>-</button>
+                <button onClick={handleIncrease}>+</button>
+                <button onClick={handleDecrease}>-</button>
             </div>
             <div>
-            <button className="saveQuestion" onClick={() => handleSave()}>Save</button>
-            <button className="deleteQuestion button" onClick={() => handleCancel()}>Cancel</button>
+                <button className="saveQuestion" onClick={() => handleSave()}>Save</button>
+                <button className="deleteQuestion button" onClick={() => handleCancel()}>Cancel</button>
             </div>
         </section>
         </div>
