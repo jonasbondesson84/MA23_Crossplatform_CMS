@@ -92,6 +92,9 @@ button:focus-visible {
 .text-field {
   margin: 5px;
 }
+.text-area {
+  resize: none;
+}
 
 
 .stars {
@@ -155,3 +158,5 @@ height: 100%;
 .option-button {
   width: 200px;
 }
+
+
