@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { actions } from '../features/question'
+import { addQuestion, updateQuestion, deleteQuestion } from '../features/question';
 
-const RankingQuestion = () => {
+import { TYPE } from "./AddQuestion";
+import { addAnswer } from "../features/answers";
+
+const RankingQuestion = ({setHideType, setType}) => {
 
     const dispatch = useDispatch();
     const questions = useSelector(state => state.questions);
+    const answerslist = useSelector(state => state.answers);
 
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
@@ -49,7 +53,24 @@ const RankingQuestion = () => {
         const newID = lastQuestion ? lastQuestion.question.id + 1 : 1;
         // const newQuestion = {type: "text", id: newID, title: title, body: body};
 
-        return {type: "rank", id: newID, title: title, body: body, options: options}
+        return {type: TYPE.RANKING, id: newID, title: title, body: body, options: options}
+    }
+
+    const newAnswer = () => {
+        const lastAnswer = answerslist[answerslist.length -1];
+        const newId = lastAnswer ? lastAnswer.answer.id +1 : 1;
+
+        return {type: TYPE.RANKING, id: newId, questionID: newId, answer: ''}
+    }
+    const handleSave = () => {
+        dispatch(addQuestion(newItem()));
+        dispatch(addAnswer(newAnswer()));
+        setHideType(false);
+        setType(0);
+    }
+    const handleCancel = () => {
+        setHideType(false);
+        setType(0);
     }
 
     return ( 
@@ -66,10 +87,8 @@ const RankingQuestion = () => {
             <button onClick={handleDecrease}>-</button>
             </div>
             <div>
-            <button className="saveQuestion" onClick={() => dispatch(actions.addQuestion(newItem()))
-                
-                }>Save</button>
-            <button className="deleteQuestion">Delete</button>
+            <button className="saveQuestion" onClick={() => handleSave()}>Save</button>
+            <button className="deleteQuestion button" onClick={() => handleCancel()}>Cancel</button>
             </div>
         </section>
         </div>

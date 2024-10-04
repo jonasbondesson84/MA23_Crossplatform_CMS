@@ -1,30 +1,26 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
-import { useDispatch, useSelector } from 'react-redux'
-import { actions } from './features/question'
+import {  useSelector } from 'react-redux'
+
 import Question from './components/Question'
 import AddQuestion from './components/AddQuestion'
+import ShowQuestions from './components/ShowQuestions';
+import { useState } from 'react';
 function App() {
-  const dispatch = useDispatch();
+  
   const questions = useSelector(state => state.questions);
+  const [showQuestions, setShowQuestions] = useState(false);
 
   return (
-    <>
-      <button onClick={()=> {
-        dispatch(actions.addQuestion({id: 1, name: 'hej'}));
-        dispatch(actions.addQuestion({id: 2, name: 'hej då'}));
-      }}>add</button>
-      {questions.map(question => (
-        <div key={question.question.id}>
-          <Question question={question.question}/>
-          
-          </div>
-        // <div></div>
-      ))}
-      <AddQuestion />
-    </>
+    <div className='content'>
+    <button onClick={() => setShowQuestions(!showQuestions)}>{showQuestions ? "Add questions" : "Show Questions"}</button>
+      {showQuestions &&  <ShowQuestions />}
+
+      
+      
+      
+     {!showQuestions &&  <AddQuestion />}
+    </div>
   )
 }
 

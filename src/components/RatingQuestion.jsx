@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { actions } from '../features/question'
+import { addQuestion, updateQuestion, deleteQuestion } from '../features/question';
 import {CiStar} from 'react-icons/ci'
+import { TYPE } from "./AddQuestion";
+import { addAnswer } from "../features/answers";
 
-const RatingQuestion = () => {
+const RatingQuestion = ({setHideType, setType}) => {
 
     const dispatch = useDispatch();
     const questions = useSelector(state => state.questions);
+    const answerslist = useSelector(state => state.answers);
 
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
@@ -18,13 +21,20 @@ const RatingQuestion = () => {
         const newID = lastQuestion ? lastQuestion.question.id + 1 : 1;
         // const newQuestion = {type: "text", id: newID, title: title, body: body};
 
-        return {type: "rating", id: newID, title: title, body: body, numberOfStars: numberOfStars}
+        return {type: TYPE.RATING, id: newID, title: title, body: body, numberOfStars: numberOfStars}
+    }
+
+    const newAnswer = () => {
+        const lastAnswer = answerslist[answerslist.length -1];
+        const newId = lastAnswer ? lastAnswer.answer.id +1 : 1;
+
+        return {type: TYPE.RATING, id: newId, questionID: newId, answer: ''}
     }
 
     const Stars = () => {
         return Array.from({length: numberOfStars}).map((_, index) => (
             <div key={index}>
-                <CiStar/>
+                <CiStar className="star"/>
             </div>
         ))
     }
@@ -41,6 +51,16 @@ const RatingQuestion = () => {
             
         }
     }
+    const handleSave = () => {
+        dispatch(addQuestion(newItem()));
+        dispatch(addAnswer(newAnswer()));
+        setHideType(false);
+        setType(0);
+    }
+    const handleCancel = () => {
+        setHideType(false);
+        setType(0);
+    }
 
     return ( 
         <div>
@@ -55,10 +75,8 @@ const RatingQuestion = () => {
             <button onClick={handleDecrease}>-</button>
             </div>
             <div>
-            <button className="saveQuestion" onClick={() => dispatch(actions.addQuestion(newItem()))
-                
-                }>Save</button>
-            <button className="deleteQuestion">Delete</button>
+            <button className="saveQuestion" onClick={() => handleSave()}>Save</button>
+            <button className="deleteQuestion button" onClick={() => handleCancel()}>Cancel</button>
             </div>
         </section>
         </div>
