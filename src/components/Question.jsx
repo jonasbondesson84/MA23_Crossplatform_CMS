@@ -5,6 +5,7 @@ import { addQuestion, updateQuestion, deleteQuestion } from "../features/questio
 import { updateAnswer } from "../features/answers";
 import {CiStar} from 'react-icons/ci'
 import { FaStar } from "react-icons/fa";
+import {Reorder} from 'framer-motion';
 
 
 const Question = ({question, numberOfQuestions, index}) => {
@@ -65,6 +66,27 @@ const Question = ({question, numberOfQuestions, index}) => {
         ))
     }
 
+    const Ranking = ({options, question}) => {
+        const [rank, setRank] = useState(options);
+
+        const updateRank = (question, e) => {
+            setRank(e);
+            saveAnswerInList(question.id, e)
+
+        }
+        return <Reorder.Group values={rank} onReorder={e => { updateRank(question, e)
+            }} >
+         {rank.map((item, index) => (
+            <Reorder.Item value={item} key={item}>
+            <div className="rank-option">
+                {index} {options[index]}
+            </div>
+               
+            </Reorder.Item>
+        ))}
+        </Reorder.Group>
+    }
+
     switch(question.type) {
         
         case TYPE.TEXT : {
@@ -100,8 +122,13 @@ const Question = ({question, numberOfQuestions, index}) => {
         }
         case TYPE.RANKING : {
             content = (
-                <div className="text-rank">
-                    rank
+                <div className="question">
+                    <p className="title">{question.title}</p>
+                    <p className="body">{question.body}</p>
+                    <div className="answer-content options">
+                        <Ranking options={question.options} question={question}/>
+                    </div>
+                    
                 </div>
             );
             break;
